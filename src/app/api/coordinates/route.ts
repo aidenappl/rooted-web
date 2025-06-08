@@ -22,7 +22,7 @@ export const GET = async (req: NextRequest) => {
         {
           role: "system",
           content:
-            "You only return in JSON a coordinates key with a value in this format [43.8323, -79.3871], then a title of the location with a title key",
+            "You only return in JSON a coordinates key with a value in this format [43.8323, -79.3871], then a title of the location with a title key. ",
         },
         {
           role: "user",

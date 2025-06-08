@@ -52,27 +52,43 @@ export default function Home() {
           <button
             className="bg-blue-500 text-white px-4 py-2 rounded cursor-pointer hover:bg-blue-600 transition-colors"
             onClick={async () => {
-              let response = await axios.get("/api/coordinates", {
+              let intent = await axios.get("/api/intent", {
                 params: {
-                  location: searchLocation,
+                  message: searchLocation,
                 },
               });
-              let data = response.data;
+              console.log("Intent response:", intent.data);
 
-              if (data.success) {
-                let [lat, lng] = data.data.coordinates;
-                console.log("Search result:", lat, lng);
-                flyToLocation(lat, lng);
-                setViewState({
-                  latitude: lat,
-                  longitude: lng,
-                  zoom: 14,
-                  bearing: 0,
-                  pitch: 0,
-                  padding: {},
+              if (!intent.data.success) {
+                alert("Error determining intent. Please try again.");
+                return;
+              }
+              if (intent.data.data.intent === "search") {
+                // If the intent is search, we can handle it differently if needed
+                console.log("Search intent detected:", intent.data.data.title);
+              } else if (intent.data.data.intent === "location") {
+                let response = await axios.get("/api/coordinates", {
+                  params: {
+                    location: searchLocation,
+                  },
                 });
-              } else {
-                alert("Location not found. Please try again.");
+                let data = response.data;
+
+                if (data.success) {
+                  let [lat, lng] = data.data.coordinates;
+                  console.log("Search result:", lat, lng);
+                  flyToLocation(lat, lng);
+                  setViewState({
+                    latitude: lat,
+                    longitude: lng,
+                    zoom: 14,
+                    bearing: 0,
+                    pitch: 0,
+                    padding: {},
+                  });
+                } else {
+                  alert("Location not found. Please try again.");
+                }
               }
             }}
           >
