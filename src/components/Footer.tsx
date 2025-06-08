@@ -3,7 +3,7 @@ import Link from "next/link";
 const Footer = () => {
   return (
     <footer className="bg-[var(--background-dark)] text-white py-4">
-      <div className="container mx-auto text-center">
+      <div className="px-10 max-w-[var(--max-page-width)] mx-auto text-center">
         <div className="flex justify-between">
           <p className="text-[var(--text-light-secondary)]">
             &copy; {new Date().getFullYear()} Rooted

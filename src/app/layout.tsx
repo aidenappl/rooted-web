@@ -18,7 +18,9 @@ export default function RootLayout({
     <html lang="en">
       <body className="bg-[var(--background)]">
         <Navigation />
-        {children}
+        <div className="px-10 max-w-[var(--max-page-width)] mx-auto">
+          {children}
+        </div>
         <Footer />
       </body>
     </html>
