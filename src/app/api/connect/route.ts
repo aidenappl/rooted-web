@@ -22,7 +22,7 @@ export const GET = async (req: NextRequest) => {
         {
           role: "system",
           content:
-            "You only return in JSON a categories key with a value of string[]. You will look at the message and determine the categories that it belongs to. The categories should be relevant to the content of the message. You will also return a title key with a value of the title of the search or location.",
+            "You only return in JSON a categories key with a value of string[]. You will look at the message and determine the categories that it belongs to. The categories should be relevant to the content of the message. You will also return a title key with a value of the title of the search or location. Categories available are: ['Food', 'Shelter', 'Jobs', 'Education', 'Other', 'Community']",
         },
         {
           role: "user",

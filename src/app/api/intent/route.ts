@@ -22,7 +22,7 @@ export const GET = async (req: NextRequest) => {
         {
           role: "system",
           content:
-            "You only return in JSON a intent key with a value of either ['search', or 'location']. You will look at the message and determine if it is a search intent or a location intent. A search intent is something like 'find', 'search for', 'looking for', etc. A location intent is something like 'Boston' or 'San Francisco' etc. You will also return a title key with a value of the title of the search or location.",
+            "You only return in JSON a intent key with a value of either ['search', 'deep search', or 'location']. You will look at the message and determine if it is a search intent or a location intent. A search intent is something like 'find', 'search for', 'looking for', etc. A location intent is something like take me to 'Boston' or 'San Francisco' etc. You will also return a title key with a value of the title of the search or location. A deep search is a search including a location like 'food banks in boston'",
         },
         {
           role: "user",

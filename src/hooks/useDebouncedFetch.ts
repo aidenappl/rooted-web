@@ -1,7 +1,7 @@
 // hooks/useDebouncedFetch.ts
 import { Organisation } from "@/types";
 import axios from "axios";
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 const useDebouncedFetch = (
   viewState: { latitude: number; longitude: number; zoom: number } | null,
@@ -9,11 +9,24 @@ const useDebouncedFetch = (
 ) => {
   const [organisations, setOrganisations] = useState<Organisation[]>([]);
   const [selectedOrg, setSelectedOrg] = useState<Organisation | null>(null);
+  const [searchCategories, setSearchCategories] = useState<string[]>([]);
   const debounceTimer = useRef<NodeJS.Timeout | null>(null);
   const lastFetchKey = useRef<string>("");
 
+  useEffect(() => {
+    console.log(searchCategories);
+  }, [searchCategories]);
+
   const getRadiusByZoom = (zoom: number): number => {
     const zoomRadiusMap: Record<number, number> = {
+      22: 1,
+      21: 2,
+      20: 5,
+      19: 20,
+      18: 150,
+      17: 250,
+      16: 500,
+      15: 1000,
       14: 1500,
       13: 3000,
       12: 5000,
@@ -22,9 +35,9 @@ const useDebouncedFetch = (
       9: 25000,
       8: 50000,
       7: 100000,
-      6: 150000,
     };
-    return zoomRadiusMap[Math.floor(zoom)] ?? 10000;
+    console.log(zoom);
+    return zoomRadiusMap[Math.floor(zoom)] ?? 0;
   };
 
   const getOrgsByRadius = async (
@@ -39,6 +52,7 @@ const useDebouncedFetch = (
         lng,
         limit: 500,
         radius,
+        categories: searchCategories.join(","),
       },
       headers: {
         "Content-Type": "application/json",
@@ -63,7 +77,7 @@ const useDebouncedFetch = (
         console.error("Error fetching orgs:", e);
       }
     },
-    []
+    [searchCategories]
   );
 
   const handleMoveEnd = useCallback(
@@ -80,7 +94,16 @@ const useDebouncedFetch = (
     [fetchOrgs, setViewState]
   );
 
-  return { organisations, selectedOrg, setSelectedOrg, handleMoveEnd };
+  return {
+    organisations,
+    selectedOrg,
+    setSelectedOrg,
+    handleMoveEnd,
+    setOrganisations,
+    searchCategories,
+    setSearchCategories,
+    fetchOrgs,
+  };
 };
 
 export default useDebouncedFetch;
