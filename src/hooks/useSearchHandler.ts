@@ -1,5 +1,4 @@
-// hooks/useSearchHandler.ts
-import axios from "axios";
+import { api, nextAPI } from "@/tools/axios.tools";
 
 export const useSearchHandler = ({
   searchLocation = "",
@@ -10,7 +9,7 @@ export const useSearchHandler = ({
   flyToLocation = (lat: number, lng: number) => {},
 }) => {
   const handleSearch = async () => {
-    let intentRes = await axios.get("/api/intent", {
+    let intentRes = await nextAPI.get("/api/intent", {
       params: { message: searchLocation },
     });
 
@@ -22,7 +21,7 @@ export const useSearchHandler = ({
     const intent = intentRes.data.data.intent;
 
     if (intent === "deep search") {
-      const locRes = await axios.get("/api/coordinates", {
+      const locRes = await nextAPI.get("/api/coordinates", {
         params: { location: searchLocation },
       });
 
@@ -42,27 +41,22 @@ export const useSearchHandler = ({
         padding: {},
       });
 
-      const connectRes = await axios.get("/api/connect", {
+      const connectRes = await nextAPI.get("/api/connect", {
         params: { message: searchLocation },
       });
 
       if (connectRes.data.success) {
         const cats = connectRes.data.data.categories;
         setSearchCategories(cats);
-        const orgsRes = await axios.get(
-          "http://10.15.10.208:8000/organisations",
-          {
-            params: {
-              lat,
-              lng,
-              requires: "coordinates",
-              radius: 10000,
-              categories: cats.join(","),
-            },
-            headers: { "Content-Type": "application/json" },
-            validateStatus: () => true,
-          }
-        );
+        const orgsRes = await api.get("/organisations", {
+          params: {
+            lat,
+            lng,
+            requires: "coordinates",
+            radius: 10000,
+            categories: cats.join(","),
+          },
+        });
 
         if (orgsRes.data.success) {
           setSelectedOrg(null);
@@ -76,7 +70,7 @@ export const useSearchHandler = ({
     }
 
     if (intent === "search") {
-      const res = await axios.get("/api/connect", {
+      const res = await nextAPI.get("/api/connect", {
         params: { message: searchLocation },
       });
       if (res.data.success) {
@@ -85,7 +79,7 @@ export const useSearchHandler = ({
     }
 
     if (intent === "location") {
-      const res = await axios.get("/api/coordinates", {
+      const res = await nextAPI.get("/api/coordinates", {
         params: { location: searchLocation },
       });
       if (res.data.success) {

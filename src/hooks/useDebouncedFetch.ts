@@ -1,4 +1,5 @@
 // hooks/useDebouncedFetch.ts
+import { api } from "@/tools/axios.tools";
 import { Organisation } from "@/types";
 import axios from "axios";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -12,10 +13,6 @@ const useDebouncedFetch = (
   const [searchCategories, setSearchCategories] = useState<string[]>([]);
   const debounceTimer = useRef<NodeJS.Timeout | null>(null);
   const lastFetchKey = useRef<string>("");
-
-  useEffect(() => {
-    console.log(searchCategories);
-  }, [searchCategories]);
 
   const getRadiusByZoom = (zoom: number): number => {
     const zoomRadiusMap: Record<number, number> = {
@@ -36,7 +33,6 @@ const useDebouncedFetch = (
       8: 50000,
       7: 100000,
     };
-    console.log(zoom);
     return zoomRadiusMap[Math.floor(zoom)] ?? 0;
   };
 
@@ -45,7 +41,7 @@ const useDebouncedFetch = (
     lng: number,
     radius: number
   ): Promise<Organisation[]> => {
-    const res = await axios.get("http://10.15.10.208:8000/organisations", {
+    const res = await api.get("/organisations", {
       params: {
         requires: "coordinates",
         lat,
@@ -53,9 +49,6 @@ const useDebouncedFetch = (
         limit: 500,
         radius,
         categories: searchCategories.join(","),
-      },
-      headers: {
-        "Content-Type": "application/json",
       },
     });
     if (!res.data.success) throw new Error(res.data.message);

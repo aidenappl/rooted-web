@@ -57,7 +57,6 @@ const MapView = ({
           anchor="bottom"
           onClick={(e) => {
             e.originalEvent.stopPropagation();
-            console.log("Marker clicked:", org);
             setSelectedOrg(org);
           }}
         >
