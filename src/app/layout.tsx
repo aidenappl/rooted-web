@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import "./globals.css";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
-import Head from "next/head";
 
 export const metadata: Metadata = {
   title: "Rooted - Find local Nonprofits",
