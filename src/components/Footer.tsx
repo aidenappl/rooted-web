@@ -17,6 +17,7 @@ const Footer = () => {
             >
               Aiden Appleby
             </Link>
+            {"  "} and Izzy Raposo
           </p>
         </div>
       </div>
