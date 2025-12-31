@@ -1,15 +1,26 @@
 import { api, nextAPI } from "@/tools/axios.tools";
+import type { Organisation } from "@/types";
+import type { ViewState } from "react-map-gl/mapbox";
+
+interface UseSearchHandlerProps {
+  searchLocation?: string;
+  setSearchCategories?: (cats: string[]) => void;
+  setOrganisations?: (orgs: Organisation[]) => void;
+  setSelectedOrg?: (org: Organisation | null) => void;
+  setViewState?: (state: ViewState) => void;
+  flyToLocation?: (lat: number, lng: number) => void;
+}
 
 export const useSearchHandler = ({
   searchLocation = "",
-  setSearchCategories = (cats: any) => {},
-  setOrganisations = (orgs: any) => {},
-  setSelectedOrg = (org: any) => {},
-  setViewState = (state: any) => {},
-  flyToLocation = (lat: number, lng: number) => {},
-}) => {
+  setSearchCategories = () => { },
+  setOrganisations = () => { },
+  setSelectedOrg = () => { },
+  setViewState = () => { },
+  flyToLocation = () => { },
+}: UseSearchHandlerProps) => {
   const handleSearch = async () => {
-    let intentRes = await nextAPI.get("/api/intent", {
+    const intentRes = await nextAPI.get("/api/intent", {
       params: { message: searchLocation },
     });
 

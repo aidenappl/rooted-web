@@ -1,10 +1,30 @@
 // hooks/useGeolocate.ts
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ViewState } from "react-map-gl/mapbox";
 
+interface DefaultLocation {
+  latitude: number;
+  longitude: number;
+  zoom: number;
+}
+
 const useGeolocate = (
-  defaultLocation = { latitude: 37.78, longitude: -122.45, zoom: 12 }
+  defaultLocationProp: DefaultLocation = {
+    latitude: 37.78,
+    longitude: -122.45,
+    zoom: 12,
+  },
 ) => {
+  // Memoize with the full prop to satisfy exhaustive-deps
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const defaultLocation = useMemo(
+    () => defaultLocationProp,
+    [
+      defaultLocationProp.latitude,
+      defaultLocationProp.longitude,
+      defaultLocationProp.zoom,
+    ],
+  );
   const [viewState, setViewState] = useState<ViewState | null>(null);
 
   useEffect(() => {
@@ -33,9 +53,9 @@ const useGeolocate = (
         enableHighAccuracy: true,
         timeout: 5000,
         maximumAge: 0,
-      }
+      },
     );
-  }, []);
+  }, [defaultLocation]);
 
   return { viewState, setViewState };
 };

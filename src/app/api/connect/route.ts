@@ -1,8 +1,5 @@
 import OpenAI from "openai";
-import dotenv from "dotenv";
 import { NextRequest, NextResponse } from "next/server";
-
-dotenv.config();
 
 const openai = new OpenAI();
 

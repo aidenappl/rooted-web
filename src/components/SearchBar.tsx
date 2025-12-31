@@ -1,12 +1,19 @@
 // components/SearchBar.tsx
 import { BeatLoader } from "react-spinners";
 
+interface SearchBarProps {
+  value?: string;
+  onChange: (val: string) => void;
+  onSearch?: () => void;
+  loading?: boolean;
+}
+
 const SearchBar = ({
   value = "",
-  onChange = (val: string) => {},
+  onChange,
   onSearch = () => {},
   loading = false,
-}) => {
+}: SearchBarProps) => {
   return (
     <div className="w-[400px] mt-5 flex gap-2">
       <input

@@ -23,11 +23,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className="bg-[var(--background)]"
-        data-new-gr-c-s-check-loaded="14.1239.0"
-        data-gr-ext-installed=""
-      >
+      <body className="bg-[var(--background)]">
         <Navigation />
         <div className="px-10 max-w-[var(--max-page-width)] mx-auto">
           {children}

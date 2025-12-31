@@ -11,7 +11,7 @@ import { useSearchHandler } from "@/hooks/useSearchHandler";
 
 import { useRef, useState } from "react";
 import { MapRef } from "react-map-gl/mapbox";
-import Legend from "@/components/Lengend";
+import Legend from "@/components/Legend";
 
 import "mapbox-gl/dist/mapbox-gl.css";
 

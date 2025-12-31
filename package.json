@@ -9,26 +9,23 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@types/mapbox-gl": "^3.4.1",
     "axios": "^1.9.0",
-    "dotenv": "^16.5.0",
-    "leaflet": "^1.9.4",
-    "lodash.debounce": "^4.0.8",
     "mapbox-gl": "^3.12.0",
-    "next": "15.3.3",
+    "next": "^15.5.9",
     "openai": "^5.1.1",
     "react": "^19.0.0-rc.1",
     "react-dom": "^19.0.0-rc.1",
-    "react-leaflet": "^5.0.0-rc.2",
     "react-map-gl": "^8.0.4",
     "react-spinners": "^0.17.0"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
-    "@types/leaflet": "^1.9.18",
+    "@types/mapbox-gl": "^3.4.1",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "eslint": "^8.57.1",
+    "eslint-config-next": "^15.5.9",
     "tailwindcss": "^4",
     "typescript": "^5"
   }

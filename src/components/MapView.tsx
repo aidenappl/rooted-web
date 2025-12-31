@@ -6,7 +6,9 @@ import Map, {
   GeolocateControl,
   ScaleControl,
   Popup,
+  MapRef,
 } from "react-map-gl/mapbox";
+import type { ViewStateChangeEvent } from "react-map-gl/mapbox";
 import Pin from "./Pin";
 import { Organisation } from "@/types";
 import { isValidUrl, normalizeUrl } from "@/tools/url.tools";
@@ -20,11 +22,11 @@ interface Props {
     bearing: number;
     pitch: number;
   };
-  ref: React.RefObject<any>;
+  ref: React.RefObject<MapRef | null>;
   organisations: Organisation[];
   selectedOrg: Organisation | null;
   setSelectedOrg: (org: Organisation | null) => void;
-  onMoveEnd: (e: any) => void;
+  onMoveEnd: (e: ViewStateChangeEvent) => void;
 }
 
 const MapView = ({

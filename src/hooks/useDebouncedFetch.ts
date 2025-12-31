@@ -1,12 +1,12 @@
 // hooks/useDebouncedFetch.ts
 import { api } from "@/tools/axios.tools";
 import { Organisation } from "@/types";
-import axios from "axios";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
+import type { ViewState } from "react-map-gl/mapbox";
 
 const useDebouncedFetch = (
-  viewState: { latitude: number; longitude: number; zoom: number } | null,
-  setViewState: (v: any) => void
+  viewState: ViewState | null,
+  setViewState: (v: ViewState) => void,
 ) => {
   const [organisations, setOrganisations] = useState<Organisation[]>([]);
   const [selectedOrg, setSelectedOrg] = useState<Organisation | null>(null);
@@ -36,24 +36,27 @@ const useDebouncedFetch = (
     return zoomRadiusMap[Math.floor(zoom)] ?? 0;
   };
 
-  const getOrgsByRadius = async (
-    lat: number,
-    lng: number,
-    radius: number
-  ): Promise<Organisation[]> => {
-    const res = await api.get("/organisations", {
-      params: {
-        requires: "coordinates",
-        lat,
-        lng,
-        limit: 500,
-        radius,
-        categories: searchCategories.join(","),
-      },
-    });
-    if (!res.data.success) throw new Error(res.data.message);
-    return res.data.data ?? [];
-  };
+  const getOrgsByRadius = useCallback(
+    async (
+      lat: number,
+      lng: number,
+      radius: number,
+    ): Promise<Organisation[]> => {
+      const res = await api.get("/organisations", {
+        params: {
+          requires: "coordinates",
+          lat,
+          lng,
+          limit: 500,
+          radius,
+          categories: searchCategories.join(","),
+        },
+      });
+      if (!res.data.success) throw new Error(res.data.message);
+      return res.data.data ?? [];
+    },
+    [searchCategories],
+  );
 
   const fetchOrgs = useCallback(
     async (lat: number, lng: number, zoom: number) => {
@@ -70,13 +73,22 @@ const useDebouncedFetch = (
         console.error("Error fetching orgs:", e);
       }
     },
-    [searchCategories]
+    [getOrgsByRadius],
   );
 
   const handleMoveEnd = useCallback(
-    (e: any) => {
+    (e: {
+      viewState: { latitude: number; longitude: number; zoom: number };
+    }) => {
       const { latitude, longitude, zoom } = e.viewState;
-      setViewState({ latitude, longitude, zoom, bearing: 0, pitch: 0 });
+      setViewState({
+        latitude,
+        longitude,
+        zoom,
+        bearing: 0,
+        pitch: 0,
+        padding: {},
+      });
 
       if (debounceTimer.current) clearTimeout(debounceTimer.current);
 
@@ -84,7 +96,7 @@ const useDebouncedFetch = (
         fetchOrgs(latitude, longitude, zoom);
       }, 300);
     },
-    [fetchOrgs, setViewState]
+    [fetchOrgs, setViewState],
   );
 
   return {
